@@ -1,0 +1,118 @@
+http://www.codeskulptor.org/#user43_Ox6PffhA2e_14.py
+
+# implementation of card game - Memory
+
+import simplegui
+import random
+
+n_cards=8
+mid_x_coordinate=[] #Gives the x coordinate of the middle point of a card 
+turns=0 #Number of turns
+deck=[] #List of cards
+selection=16*[0] #list that specifies whether cards are flipped (0 is closed, 1 is open)
+cards_up=0 #Number of cards opened per turn, can be 0,1 or 2 
+number_correct=0
+current_selection=[0,0]
+test=0
+
+n_deck=2*n_cards
+
+def initNum():
+    #Initializing a random list that contains twice the number in the 
+    #range 1,2,...,nCards
+    global deck
+    deck=[card for card in range(n_cards) for repeat in range(2)]
+    random.shuffle(deck)
+    return deck
+
+def new_game():
+    # Function to initialize globals for starting new game
+    global left_x_coordinate, turns, deck, selection, cards_up,number_correct,current_selection, n_deck
+    
+    left_x_coordinate=[]
+    turns=0
+    selection=n_deck*[0]
+    cards_up=0
+    number_correct=0
+    currentSelection=[0,0]
+    
+    for x in range(0,n_deck):
+        mid_x_coordinate.append(25+x*51) 
+    initNum()
+    
+def flipCard(pos):
+    #flips cards that are clicked upon. This is done by setting the corresponding
+    #selection list element to 1
+    global lim_range
+    for x in range(n_deck-1):
+            if(pos[0]>=mid_x_coordinate[x]-25 and pos[0]<mid_x_coordinate[x]+26):	
+                selection[x]=1
+                card_pos=x
+            elif(pos[0]>=mid_x_coordinate[n_deck-1]-25):
+                selection[n_deck-1]=1
+                card_pos=n_deck-1
+    return(card_pos)
+
+def indexFun():
+    #Checks whether two current_selection elements are the same (a match). If this is not
+    #the case, these elements are removed from the selection list
+    global selection, current_selection, turns, cards_up
+    if(deck[current_selection[0]]==deck[current_selection[1]]):
+        #Find index
+        for i,j in enumerate(deck):
+            if(i==current_selection[0] or i==current_selection[1]):
+                selection[i]=1
+    else:
+        for element in current_selection:
+            selection[element]=0
+    cards_up = 0 
+    current_selection=[0,0]
+    turns += 1
+            
+# define event handlers
+def mouseclick(pos):
+    global cards_up, selection, turns, current_selection, card_pos, test
+    
+    if(cards_up==0):
+        cards_up += 1
+        card_pos=flipCard(pos)
+        current_selection[0]=card_pos
+    elif(cards_up==1):
+        card_pos=flipCard(pos)
+        cards_up += 1
+        current_selection[1]=card_pos
+    else: 
+        indexFun()
+        cards_up += 1
+        card_pos=flipCard(pos)
+        current_selection[0]=card_pos
+        
+def drawlines(canvas):
+    for x in range(n_deck):
+        if(selection[x]==0):
+            #print(lr_coordinates[x][1])
+            canvas.draw_line((mid_x_coordinate[x],0),(mid_x_coordinate[x],100),50,"Green") 
+        else:
+            #A green line is drawn for each card with a radius of 25
+            canvas.draw_line((mid_x_coordinate[x],0),(mid_x_coordinate[x],100),50,"White") 
+            canvas.draw_text(str(deck[x]),[mid_x_coordinate[x]-15,60],50,"Black") 
+
+# cards are logically 50x100 pixels in size    
+def draw(canvas):
+    drawlines(canvas)
+    label.set_text("Turns = " + str(turns))
+
+# create frame and add a button and labels
+frame = simplegui.create_frame("Memory", 815, 100)
+frame.add_button("Reset", new_game)
+label = frame.add_label("Turns=0")
+
+# register event handlers
+frame.set_mouseclick_handler(mouseclick)
+frame.set_draw_handler(draw)
+
+# get things rolling
+new_game()
+frame.start()
+
+# Always remember to review the grading rubric
