@@ -1,6 +1,7 @@
 # implementation of card game - Memory
 
 # http://www.codeskulptor.org/#user44_Ox6PffhA2e_15.py
+# Author: Yusuf Tatlier
 
 import simplegui
 import random
