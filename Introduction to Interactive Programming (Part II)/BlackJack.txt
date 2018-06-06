@@ -1,7 +1,7 @@
 http://www.codeskulptor.org/#user43_cyZZG3RjIe_2.py
 
 # Mini-project #6 - Blackjack
-#Author: Yusuf Tatlier
+# Author: Yusuf Tatlier
 
 import simplegui
 import random
