@@ -1,6 +1,7 @@
 # implementation of Spaceship - program template for RiceRocks
 
-#http://www.codeskulptor.org/#user43_obDB06QyOp_16.py
+# http://www.codeskulptor.org/#user43_obDB06QyOp_16.py
+# Author: Yusuf Tatlier
 
 import simplegui
 import math
